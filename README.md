@@ -100,7 +100,7 @@ Include your model’s performance metrics, such as Mean Absolute Error (MAE) an
 
 | Dataset Part | MAE  | MSE  |
 |--------------|------|------|
-| Part A       | XX.X | XX.X |
+| Part A       | 11.9 | XX.X |
 | Part B       | XX.X | XX.X |
 
 ## References
