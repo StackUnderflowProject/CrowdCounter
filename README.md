@@ -107,4 +107,3 @@ Include your model’s performance metrics, such as Mean Absolute Error (MAE) an
 
 1. [CSRNet: Dilated Convolutional Neural Networks for Understanding the Highly Congested Scenes](https://arxiv.org/pdf/1802.10062)
 2. [ShanghaiTech Crowd Counting Dataset](https://www.kaggle.com/datasets/tthien/shanghaitech)
-
