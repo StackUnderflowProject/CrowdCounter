@@ -98,7 +98,6 @@ def train(train_list, model, criterion, optimizer, epoch, device):
     train_loader = DataLoader(data_set, batch_size=args.batch_size)
 
     model.train()
-    end = time.time()
 
     for i, (img, target) in enumerate(tqdm(train_loader, desc=f"Training Epoch {epoch}")):
 

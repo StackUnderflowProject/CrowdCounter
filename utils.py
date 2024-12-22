@@ -5,6 +5,8 @@ import shutil
 import os
 import json
 import random
+import cv2
+from PIL import Image
 
 def create_image_paths_json(directory, output_file="image_paths.json", limit=None):
     """
@@ -59,3 +61,12 @@ def save_checkpoint(state, is_best, task_id, filename='checkpoint.pth.tar'):
     torch.save(state, task_id + filename)
     if is_best:
         shutil.copyfile(task_id + filename, task_id + 'model_best.pth.tar')
+
+def load_data(img_path,train = True):
+    gt_path = img_path.replace('.jpg','.h5').replace('images','ground-truth')
+    img = Image.open(img_path).convert('RGB')
+    gt_file = h5py.File(gt_path)
+    target = np.asarray(gt_file['density'])
+    target = cv2.resize(target, (target.shape[1] // 8, target.shape[0] // 8), interpolation=cv2.INTER_CUBIC) * 64
+
+    return img,target

@@ -163,6 +163,8 @@ cython_debug/
 
 ShanghaiTech/
 
+.ipynb_checkpoints/
 
+*.pth.tar
 
 *.json
