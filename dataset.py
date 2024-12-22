@@ -3,7 +3,6 @@ from torch.utils.data import Dataset
 
 from utils import load_data
 
-
 class ListDataset(Dataset):
     def __init__(self, root, shape=None, shuffle=True, transform=None, train=False, seen=0, batch_size=1,
                  num_workers=4):
