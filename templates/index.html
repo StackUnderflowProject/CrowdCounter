@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Counter</title>
+</head>
+<body>
+<h1>Upload an Image to Count People</h1>
+<form action="/predict" method="post" enctype="multipart/form-data">
+    <label for="image">Choose an image:</label>
+    <input type="file" name="image" id="image" required><br><br>
+    <label for="density">Density:</label>
+    <select name="density" id="density">
+        <option value="dense">Dense</option>
+        <option value="sparse">Sparse</option>
+    </select><br><br>
+    <button type="submit">Predict</button>
+</form>
+</body>
+</html>
