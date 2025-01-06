@@ -13,7 +13,7 @@ transform = transforms.Compose([
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python script.py <filename> <model>")
+        print("Usage: python predict.py <filename> <model>")
         print("<filename>: Path to the image file to evaluate")
         print("<model>: 'dense' or 'sparse'")
         sys.exit(1)
