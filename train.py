@@ -5,6 +5,7 @@ import time
 
 import torch
 import torch.nn as nn
+from matplotlib import pyplot as plt
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -28,6 +29,7 @@ def main():
     global args, best_prec1
 
     best_prec1 = 1e6
+    mae_history = []  # Track MAE values
 
     args = parser.parse_args()
     args.original_lr = 1e-7
@@ -36,7 +38,7 @@ def main():
     args.momentum = 0.95
     args.decay = 5 * 1e-4
     args.start_epoch = 0
-    args.epochs = 400
+    args.epochs = 20
     args.steps = [-1, 1, 100, 150]
     args.scales = [1, 1, 1, 1]
     args.workers = 4
@@ -49,19 +51,18 @@ def main():
 
     torch.cuda.manual_seed(args.seed)
 
-    # Check for GPU availability and use it
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    model = CrowdCounterModel().to(device)  # Move model to device (GPU or CPU)
-    criterion = nn.MSELoss(reduction='sum').to(device)  # Move criterion to device
+    model = CrowdCounterModel().to(device)
+    criterion = nn.MSELoss(reduction='sum').to(device)
 
     optimizer = torch.optim.SGD(model.parameters(), args.lr, momentum=args.momentum, weight_decay=args.decay)
 
     if args.pre:
         if os.path.isfile(args.pre):
             print("=> loading checkpoint '{}'".format(args.pre))
-            checkpoint = torch.load(args.pre, map_location=device)  # Ensure checkpoint is loaded to the correct device
+            checkpoint = torch.load(args.pre, map_location=device)
             args.start_epoch = checkpoint['epoch']
             best_prec1 = checkpoint['best_prec1']
             model.load_state_dict(checkpoint['state_dict'])
@@ -74,6 +75,7 @@ def main():
         adjust_learning_rate(optimizer, epoch)
         train(train_list, model, criterion, optimizer, epoch, device)
         prec1 = validate(val_list, model, device)
+        mae_history.append(prec1.item() if isinstance(prec1, torch.Tensor) else prec1)  # Fix added here
 
         is_best = prec1 < best_prec1
         best_prec1 = min(prec1, best_prec1)
@@ -85,6 +87,17 @@ def main():
             'best_prec1': best_prec1,
             'optimizer': optimizer.state_dict(),
         }, is_best, args.task)
+
+
+    plt.figure()
+    plt.plot(range(args.start_epoch, args.epochs), mae_history, label='MAE')
+    plt.xlabel('Epochs')
+    plt.ylabel('Mean Absolute Error')
+    plt.title('MAE Through Training')
+    plt.legend()
+    plt.grid()
+    plt.savefig(f'{args.task}_mae_plot.png')  # Save the plot as an image
+    plt.show()
 
 
 def train(train_list, model, criterion, optimizer, epoch, device):

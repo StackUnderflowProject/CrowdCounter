@@ -67,41 +67,49 @@ The model is trained and evaluated using the [ShanghaiTech dataset](https://www.
 
 3. Preprocess the dataset to generate density maps:
 
-   ```bash
-   python preprocess.py --data_dir ./data
-   ```
+    Follow the instructions in the `make_dataset.ipynb` notebook to generate the ground truth. It may take some time to generate the dynamic ground truth. Use the `create_image_paths_json()` function in `utils.py` to generate your own JSON file.
 
 ### Training
 
 Start training the model:
 
 ```bash
-python train.py --data_dir ./data --part A --epochs 100 --batch_size 16
+python train.py <train_json> <val_json> <task_id>
 ```
 
-- `--data_dir`: Path to the dataset directory.
-- `--part`: Dataset part to train on (`A` or `B`).
-- `--epochs`: Number of training epochs.
-- `--batch_size`: Batch size for training.
+- `<train_josn>`: Path to the JSON file generated with `create_image_paths_json` for training the model.
+- `val_json`: Path to the JSON file generated with `create_image_paths_json` for validating the model.
+- `<task_id>`: Task ID for the training process.
 
-### Evaluation
+### Prediction
 
-Evaluate the trained model:
+Have the model predict the crowd count for a given image:
 
 ```bash
-python evaluate.py --data_dir ./data --part A --model_path ./model_best.pth
+python predict.py <image_path> <crowd_type>
+```
+- `<image_path>`: Path to the image for which the crowd count is to be predicted.
+- `<crowd_type>`: Type of crowd ('dense' or 'sparse') for the image.
+
+### Accuracy Evaluation
+
+Evaluate the model's performance using Mean Absolute Error (MAE), 
+the script will randomly select 100 images from the test set and calculate the MAE, 
+note set up the correct project structure and paths before running the script.:
+
+```bash
+python test_model_accuracy.py
 ```
 
-- `--model_path`: Path to the trained model.
 
 ## Results
 
-Include your model’s performance metrics, such as Mean Absolute Error (MAE) and Mean Squared Error (MSE), for both Part A and Part B of the ShanghaiTech dataset.
+Include your model’s performance metrics, such as Mean Absolute Error (MAE) for both Part A and Part B of the ShanghaiTech dataset.
 
-| Dataset Part | MAE  | MSE  |
-|--------------|------|------|
-| Part A       | 11.9 | XX.X |
-| Part B       | XX.X | XX.X |
+| Dataset Part    | MAE    |
+|-----------------|--------|
+| Part A (dense)  | 84.194 |
+| Part B (sparse) | 11.282 |
 
 ## References
 
