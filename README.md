@@ -106,10 +106,10 @@ python test_model_accuracy.py
 
 Include your model’s performance metrics, such as Mean Absolute Error (MAE) for both Part A and Part B of the ShanghaiTech dataset.
 
-| Dataset Part    | MAE    |
-|-----------------|--------|
-| Part A (dense)  | 84.194 |
-| Part B (sparse) | 11.282 |
+| Dataset Part    | MAE      | MSE      |
+|-----------------|----------|----------|
+| Part A (dense)  | 74.51992 | 12530.02 |
+| Part B (sparse) | 11.2835  | 302.793  |
 
 ## References
 
